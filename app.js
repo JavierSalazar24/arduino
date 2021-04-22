@@ -26,6 +26,8 @@ app.listen(port, () => {
   );
 });
 
+app.use(express.static(__dirname + "index.html"));
+
 app.get("/", (req, res) => {
   return res.send({
     mensaje: "Funcionando 100%",
