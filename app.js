@@ -26,6 +26,12 @@ app.listen(port, () => {
   );
 });
 
+app.get("/", (req, res) => {
+  return res.send({
+    mensaje: "Funcionando 100%",
+  });
+});
+
 // Traer el board y el led
 const { Board, Led, Proximity } = require("johnny-five");
 const board = new Board();
@@ -50,12 +56,6 @@ board.on("ready", () => {
     }
     led.off();
     buzzer.off();
-  });
-
-  app.get("/", (req, res) => {
-    return res.send({
-      mensaje: "Funcionando 100%",
-    });
   });
 
   // Ruta de encendido
