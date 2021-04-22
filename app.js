@@ -1,4 +1,4 @@
-"use strict";
+// "use strict";
 
 //ejecutar el express
 var bodyParser = require("body-parser"); //convertir todo a JSON
