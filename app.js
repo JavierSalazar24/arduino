@@ -52,6 +52,12 @@ board.on("ready", () => {
     buzzer.off();
   });
 
+  app.get("/", (req, res) => {
+    return res.send({
+      mensaje: "Funcionando 100%",
+    });
+  });
+
   // Ruta de encendido
   app.post("/encendido", (req, res) => {
     var params = req.body;
