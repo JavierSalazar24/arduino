@@ -1,21 +1,21 @@
 "use stric";
 
 //ejecutar el express
-var bodyParser = require("body-parser"); //convertir todo a JSON
+// var bodyParser = require("body-parser"); //convertir todo a JSON
 const express = require("express");
 const app = express();
 
 //cargar el body-parser para utilizar posteriormente
-app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.urlencoded({ extended: false }));
 
 //asegurar que el body-parser ppueda convertir cualquier cosa en JSON
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
 //requerir MongoDB
-const { MongoClient } = require("mongodb");
+// const { MongoClient } = require("mongodb");
 // URL de la BD
-const uri =
-  "mongodb+srv://javier:javier12345@cluster0.w3wdi.mongodb.net/opss?retryWrites=true&w=majority";
+// const uri =
+  // "mongodb+srv://javier:javier12345@cluster0.w3wdi.mongodb.net/opss?retryWrites=true&w=majority";
 
 //Escuchar por el puerto que nos de el sitio
 var port = 3900 || process.env.PORT;
@@ -28,31 +28,31 @@ app.listen(port, () => {
 
 app.use(express.static(__dirname + "/public"));
 
-// Traer el board y el led
-const { Board, Led, Proximity } = require("johnny-five");
-const board = new Board();
+// // Traer el board y el led
+// const { Board, Led, Proximity } = require("johnny-five");
+// const board = new Board();
 
-// Iniciar el board
-board.on("ready", () => {
-  const led = new Led(13);
-  const buzzer = new Led(12);
+// // Iniciar el board
+// board.on("ready", () => {
+//   const led = new Led(13);
+//   const buzzer = new Led(12);
 
-  const proximity = new Proximity({
-    controller: "HCSR04",
-    pin: 3,
-  });
+//   const proximity = new Proximity({
+//     controller: "HCSR04",
+//     pin: 3,
+//   });
 
-  proximity.on("data", function () {
-    if (this.cm <= 20 && this.cm > 0) {
-      console.log(" cm : ", this.cm);
-      led.on();
-      buzzer.on();
-      // led.blink(200);
-      // buzzer.blink(200);
-    }
-    led.off();
-    buzzer.off();
-  });
+//   proximity.on("data", function () {
+//     if (this.cm <= 20 && this.cm > 0) {
+//       console.log(" cm : ", this.cm);
+//       led.on();
+//       buzzer.on();
+//       // led.blink(200);
+//       // buzzer.blink(200);
+//     }
+//     led.off();
+//     buzzer.off();
+//   });
 
   //   // Ruta de encendido
   //   app.post("/encendido", (req, res) => {
