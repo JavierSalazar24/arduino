@@ -18,11 +18,14 @@ const app = express();
   // "mongodb+srv://javier:javier12345@cluster0.w3wdi.mongodb.net/opss?retryWrites=true&w=majority";
 
 //Escuchar por el puerto que nos de el sitio
-var port = 3900 || process.env.PORT;
-app.listen(port, () => {
+const server = http.createServer(app);
+const puerto = 3900 || process.env.PORT;
+
+app.use(express.static(__dirname + "/public"));
+
+server.listen(puerto, () => {
   console.log(
-    "Servidor corriendo y listo para escuchar peticiones en: http://localhost: " +
-      port
+    "Servidor corriendo y listo para escuchar peticiones en puerto " + puerto
   );
 });
 
