@@ -26,7 +26,7 @@ app.listen(port, () => {
   );
 });
 
-// app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/public"));
 
 // Traer el board y el led
 const { Board, Led, Proximity } = require("johnny-five");
