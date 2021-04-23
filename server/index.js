@@ -29,7 +29,6 @@ server.listen(puerto, () => {
   );
 });
 
-app.use(express.static(__dirname + "/public"));
 
 // // Traer el board y el led
 // const { Board, Led, Proximity } = require("johnny-five");
