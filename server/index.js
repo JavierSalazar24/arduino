@@ -2,6 +2,7 @@
 
 //ejecutar el express
 // var bodyParser = require("body-parser"); //convertir todo a JSON
+const http = require("http"); //requerir peticion http
 const express = require("express");
 const app = express();
 
