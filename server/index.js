@@ -20,7 +20,7 @@ const uri =
 //Escuchar por el puerto que nos de el sitio
 const puerto = process.env.PORT || 3900;
 
-app.use(express.static(__dirname + "index.html"));
+app.use(express.static(__dirname + "server/index.html"));
 
 app.listen(puerto, () => {
   console.log(
