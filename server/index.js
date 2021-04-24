@@ -2,7 +2,7 @@
 
 //ejecutar el express
 // var bodyParser = require("body-parser"); //convertir todo a JSON
-const http = require("http"); //requerir peticion http
+// const http = require("http"); //requerir peticion http
 const express = require("express");
 const app = express();
 
@@ -19,12 +19,12 @@ const app = express();
 // "mongodb+srv://javier:javier12345@cluster0.w3wdi.mongodb.net/opss?retryWrites=true&w=majority";
 
 //Escuchar por el puerto que nos de el sitio
-const server = http.createServer(app);
-const puerto = 3900 || process.env.PORT;
+// const server = http.createServer(app);
+const puerto = process.env.PORT || 3900;
 
 app.use(express.static(__dirname + "/public"));
 
-server.listen(puerto, () => {
+app.listen(puerto, () => {
   console.log(
     "Servidor corriendo y listo para escuchar peticiones en puerto " + puerto
   );
