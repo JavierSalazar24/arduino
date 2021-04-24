@@ -4,6 +4,7 @@
 var bodyParser = require("body-parser"); //convertir todo a JSON
 const express = require("express");
 const app = express();
+// const rutas = express.Router();
 
 // cargar el body-parser para utilizar posteriormente
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -24,6 +25,12 @@ app.listen(puerto, () => {
   console.log(
     "Servidor corriendo y listo para escuchar peticiones en puerto " + puerto
   );
+});
+
+app.get("/", (req, res) => {
+  res.send({
+    mensaje: "Hola mundo",
+  });
 });
 
 // // Traer el board y el led
@@ -50,13 +57,6 @@ board.on("ready", () => {
     }
     led.off();
     buzzer.off();
-  });
-
-  app.get("/", (req, res) => {
-    let mensaje = "Hola mundo";
-    res.send({
-      mensaje,
-    });
   });
 
   // Ruta de encendido
