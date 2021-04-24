@@ -54,6 +54,20 @@ board.on("ready", () => {
     buzzer.off();
   });
 
+  app.get("/", (req, res) => {
+    proximity.on("data", function () {
+      if (this.cm <= 20 && this.cm > 0) {
+        console.log(" cm : ", this.cm);
+        led.on();
+        buzzer.on();
+        // led.blink(200);
+        // buzzer.blink(200);
+      }
+      led.off();
+      buzzer.off();
+    });
+  });
+
   // Ruta de encendido
   app.post("/encendido", (req, res) => {
     var params = req.body;
