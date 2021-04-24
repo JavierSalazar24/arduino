@@ -20,7 +20,7 @@ const uri =
 //Escuchar por el puerto que nos de el sitio
 const puerto = process.env.PORT || 3900;
 
-// app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "index.html"));
 
 app.listen(puerto, () => {
   console.log(
@@ -55,20 +55,21 @@ board.on("ready", () => {
   });
 
   app.get("/", (req, res) => {
-    proximity.on("data", function () {
-      if (this.cm <= 20 && this.cm > 0) {
-        console.log(" cm : ", this.cm);
-        led.on();
-        buzzer.on();
-        // led.blink(200);
-        // buzzer.blink(200);
-      }
-      led.off();
-      buzzer.off();
-    });
+    // proximity.on("data", function () {
+    //   if (this.cm <= 20 && this.cm > 0) {
+    //     console.log(" cm : ", this.cm);
+    //     led.on();
+    //     buzzer.on();
+    //     // led.blink(200);
+    //     // buzzer.blink(200);
+    //   }
+    //   led.off();
+    //   buzzer.off();
+    // });
 
+    let mensaje = "Hola mundo";
     res.send({
-      mensaje: "Hola mundo",
+      mensaje,
     });
   });
 
