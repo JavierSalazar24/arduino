@@ -20,8 +20,6 @@ const uri =
 //Escuchar por el puerto que nos de el sitio
 const puerto = process.env.PORT || 3900;
 
-app.use(express.static(__dirname + "server/index.html"));
-
 app.listen(puerto, () => {
   console.log(
     "Servidor corriendo y listo para escuchar peticiones en puerto " + puerto
@@ -54,24 +52,12 @@ board.on("ready", () => {
     buzzer.off();
   });
 
-  // app.get("/", (req, res) => {
-  //   // proximity.on("data", function () {
-  //   //   if (this.cm <= 20 && this.cm > 0) {
-  //   //     console.log(" cm : ", this.cm);
-  //   //     led.on();
-  //   //     buzzer.on();
-  //   //     // led.blink(200);
-  //   //     // buzzer.blink(200);
-  //   //   }
-  //   //   led.off();
-  //   //   buzzer.off();
-  //   // });
-
-  //   let mensaje = "Hola mundo";
-  //   res.send({
-  //     mensaje,
-  //   });
-  // });
+  app.get("/", (req, res) => {
+    let mensaje = "Hola mundo";
+    res.send({
+      mensaje,
+    });
+  });
 
   // Ruta de encendido
   app.post("/encendido", (req, res) => {
