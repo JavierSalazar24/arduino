@@ -66,6 +66,10 @@ board.on("ready", () => {
       led.off();
       buzzer.off();
     });
+
+    res.send({
+      mensaje: "Hola mundo",
+    });
   });
 
   // Ruta de encendido
