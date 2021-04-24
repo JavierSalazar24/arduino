@@ -27,6 +27,10 @@ app.listen(puerto, () => {
   );
 });
 
+// // Traer el board y el led
+const { Board, Led, Proximity } = require("johnny-five");
+const board = new Board();
+
 app.get("/", (req, res) => {
   board.on("ready", () => {
     const led = new Led(13);
@@ -69,10 +73,6 @@ app.get("/", (req, res) => {
     mensaje: "Hola mundo",
   });
 });
-
-// // Traer el board y el led
-const { Board, Led, Proximity } = require("johnny-five");
-const board = new Board();
 
 // Ruta de encendido
 app.post("/encendido", (req, res) => {
