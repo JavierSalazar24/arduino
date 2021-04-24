@@ -28,11 +28,6 @@ app.listen(puerto, () => {
 });
 
 app.get("/", (req, res) => {
-  // // Traer el board y el led
-  const { Board, Led, Proximity } = require("johnny-five");
-  const board = new Board();
-
-  // Iniciar el board
   board.on("ready", () => {
     const led = new Led(13);
     const buzzer = new Led(12);
@@ -45,89 +40,118 @@ app.get("/", (req, res) => {
     proximity.on("data", function () {
       if (this.cm <= 20 && this.cm > 0) {
         console.log(" cm : ", this.cm);
-        let cm = this.cm;
-        res.send({
-          mensaje: cm,
-        });
         led.on();
         buzzer.on();
-        // led.blink(200);
-        // buzzer.blink(200);
+        connect();
+        async function connect() {
+          const client = new MongoClient(uri, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+          });
+          await client.connect();
+          const db = client.db("opss");
+          // console.log("conectado a la BD", db.databaseName);
+          const clientes = db.collection("clientes");
+          await clientes.updateOne(
+            { correo: params.correo },
+            { $set: { [`alarmas.alarma ${id}`]: "encendida" } }
+          );
+          // console.log(actualizar.modifiedCount);
+          client.close();
+        }
       }
       led.off();
       buzzer.off();
     });
+  });
 
-    // Ruta de encendido
-    // app.post("/encendido", (req, res) => {
-    //   var params = req.body;
+  res.send({
+    mensaje: "Hola mundo",
+  });
+});
 
-    //   let id = parseInt(params.id_alarma) + 1;
+// // Traer el board y el led
+const { Board, Led, Proximity } = require("johnny-five");
+const board = new Board();
 
-    //   connect();
-    //   async function connect() {
-    //     const client = new MongoClient(uri, {
-    //       useNewUrlParser: true,
-    //       useUnifiedTopology: true,
-    //     });
-    //     await client.connect();
-    //     const db = client.db("opss");
-    //     // console.log("conectado a la BD", db.databaseName);
-    //     const clientes = db.collection("clientes");
-    //     await clientes.updateOne(
-    //       { correo: params.correo },
-    //       { $set: { [`alarmas.alarma ${id}`]: "encendida" } }
-    //     );
-    //     // console.log(actualizar.modifiedCount);
-    //     client.close();
-    //   }
+// Ruta de encendido
+app.post("/encendido", (req, res) => {
+  // Iniciar el board
+  board.on("ready", () => {
+    const led = new Led(13);
+    const buzzer = new Led(12);
 
-    //   status = true;
-    //   console.log(status);
+    var params = req.body;
+    let id = parseInt(params.id_alarma) + 1;
 
-    //   led.blink(500);
-    //   buzzer.blink(500);
+    connect();
+    async function connect() {
+      const client = new MongoClient(uri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      });
+      await client.connect();
+      const db = client.db("opss");
+      // console.log("conectado a la BD", db.databaseName);
+      const clientes = db.collection("clientes");
+      await clientes.updateOne(
+        { correo: params.correo },
+        { $set: { [`alarmas.alarma ${id}`]: "encendida" } }
+      );
+      // console.log(actualizar.modifiedCount);
+      client.close();
+    }
 
-    //   return res.status(200).send({
-    //     status,
-    //   });
-    // });
+    status = true;
+    console.log(status);
 
-    // Ruta de apagado
-    // app.post("/apagado", (req, res) => {
-    //   var params = req.body;
+    led.blink(500);
+    buzzer.blink(500);
 
-    //   let id = parseInt(params.id_alarma) + 1;
+    return res.status(200).send({
+      status,
+    });
+  });
+});
 
-    //   connect();
-    //   async function connect() {
-    //     const client = new MongoClient(uri, {
-    //       useNewUrlParser: true,
-    //       useUnifiedTopology: true,
-    //     });
-    //     await client.connect();
-    //     const db = client.db("opss");
-    //     // console.log("conectado a la BD", db.databaseName);
-    //     const clientes = db.collection("clientes");
-    //     await clientes.updateOne(
-    //       { correo: params.correo },
-    //       { $set: { [`alarmas.alarma ${id}`]: "apagada" } }
-    //     );
-    //     // console.log(actualizar.modifiedCount);
-    //     client.close();
-    //   }
+// Ruta de apagado
+app.post("/apagado", (req, res) => {
+  // Iniciar el board
+  board.on("ready", () => {
+    const led = new Led(13);
+    const buzzer = new Led(12);
 
-    //   status = false;
-    //   console.log(status);
+    var params = req.body;
+    let id = parseInt(params.id_alarma) + 1;
 
-    //   led.stop();
-    //   led.off();
-    //   buzzer.off();
-    //   buzzer.stop();
+    connect();
+    async function connect() {
+      const client = new MongoClient(uri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      });
+      await client.connect();
+      const db = client.db("opss");
+      // console.log("conectado a la BD", db.databaseName);
+      const clientes = db.collection("clientes");
+      await clientes.updateOne(
+        { correo: params.correo },
+        { $set: { [`alarmas.alarma ${id}`]: "apagada" } }
+      );
+      // console.log(actualizar.modifiedCount);
+      client.close();
+    }
 
-    //   return res.status(200).send({
-    //     status,
-    //   });
-    // });
+    status = false;
+    console.log(status);
+
+    led.stop();
+    led.off();
+    buzzer.off();
+    buzzer.stop();
+
+    return res.status(200).send({
+      status,
+    });
   });
 });
