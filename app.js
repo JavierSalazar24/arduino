@@ -31,103 +31,103 @@ app.get("/", (req, res) => {
   res.send({
     mensaje: "Hola mundo",
   });
-});
 
-// // Traer el board y el led
-const { Board, Led, Proximity } = require("johnny-five");
-const board = new Board();
+  // // Traer el board y el led
+  const { Board, Led, Proximity } = require("johnny-five");
+  const board = new Board();
 
-// Iniciar el board
-board.on("ready", () => {
-  const led = new Led(13);
-  const buzzer = new Led(12);
+  // Iniciar el board
+  board.on("ready", () => {
+    const led = new Led(13);
+    const buzzer = new Led(12);
 
-  const proximity = new Proximity({
-    controller: "HCSR04",
-    pin: 3,
-  });
-
-  proximity.on("data", function () {
-    if (this.cm <= 20 && this.cm > 0) {
-      console.log(" cm : ", this.cm);
-      led.on();
-      buzzer.on();
-      // led.blink(200);
-      // buzzer.blink(200);
-    }
-    led.off();
-    buzzer.off();
-  });
-
-  // Ruta de encendido
-  app.post("/encendido", (req, res) => {
-    var params = req.body;
-
-    let id = parseInt(params.id_alarma) + 1;
-
-    connect();
-    async function connect() {
-      const client = new MongoClient(uri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      });
-      await client.connect();
-      const db = client.db("opss");
-      // console.log("conectado a la BD", db.databaseName);
-      const clientes = db.collection("clientes");
-      await clientes.updateOne(
-        { correo: params.correo },
-        { $set: { [`alarmas.alarma ${id}`]: "encendida" } }
-      );
-      // console.log(actualizar.modifiedCount);
-      client.close();
-    }
-
-    status = true;
-    console.log(status);
-
-    led.blink(500);
-    buzzer.blink(500);
-
-    return res.status(200).send({
-      status,
+    const proximity = new Proximity({
+      controller: "HCSR04",
+      pin: 3,
     });
-  });
 
-  // Ruta de apagado
-  app.post("/apagado", (req, res) => {
-    var params = req.body;
+    proximity.on("data", function () {
+      if (this.cm <= 20 && this.cm > 0) {
+        console.log(" cm : ", this.cm);
+        led.on();
+        buzzer.on();
+        // led.blink(200);
+        // buzzer.blink(200);
+      }
+      led.off();
+      buzzer.off();
+    });
 
-    let id = parseInt(params.id_alarma) + 1;
+    // Ruta de encendido
+    app.post("/encendido", (req, res) => {
+      var params = req.body;
 
-    connect();
-    async function connect() {
-      const client = new MongoClient(uri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
+      let id = parseInt(params.id_alarma) + 1;
+
+      connect();
+      async function connect() {
+        const client = new MongoClient(uri, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        });
+        await client.connect();
+        const db = client.db("opss");
+        // console.log("conectado a la BD", db.databaseName);
+        const clientes = db.collection("clientes");
+        await clientes.updateOne(
+          { correo: params.correo },
+          { $set: { [`alarmas.alarma ${id}`]: "encendida" } }
+        );
+        // console.log(actualizar.modifiedCount);
+        client.close();
+      }
+
+      status = true;
+      console.log(status);
+
+      led.blink(500);
+      buzzer.blink(500);
+
+      return res.status(200).send({
+        status,
       });
-      await client.connect();
-      const db = client.db("opss");
-      // console.log("conectado a la BD", db.databaseName);
-      const clientes = db.collection("clientes");
-      await clientes.updateOne(
-        { correo: params.correo },
-        { $set: { [`alarmas.alarma ${id}`]: "apagada" } }
-      );
-      // console.log(actualizar.modifiedCount);
-      client.close();
-    }
+    });
 
-    status = false;
-    console.log(status);
+    // Ruta de apagado
+    app.post("/apagado", (req, res) => {
+      var params = req.body;
 
-    led.stop();
-    led.off();
-    buzzer.off();
-    buzzer.stop();
+      let id = parseInt(params.id_alarma) + 1;
 
-    return res.status(200).send({
-      status,
+      connect();
+      async function connect() {
+        const client = new MongoClient(uri, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        });
+        await client.connect();
+        const db = client.db("opss");
+        // console.log("conectado a la BD", db.databaseName);
+        const clientes = db.collection("clientes");
+        await clientes.updateOne(
+          { correo: params.correo },
+          { $set: { [`alarmas.alarma ${id}`]: "apagada" } }
+        );
+        // console.log(actualizar.modifiedCount);
+        client.close();
+      }
+
+      status = false;
+      console.log(status);
+
+      led.stop();
+      led.off();
+      buzzer.off();
+      buzzer.stop();
+
+      return res.status(200).send({
+        status,
+      });
     });
   });
 });
