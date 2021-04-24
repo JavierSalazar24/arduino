@@ -31,46 +31,47 @@ app.listen(puerto, () => {
 const { Board, Led, Proximity } = require("johnny-five");
 const board = new Board();
 
-app.get("/", (req, res) => {
-  board.on("ready", () => {
-    const led = new Led(13);
-    const buzzer = new Led(12);
+board.on("ready", () => {
+  const led = new Led(13);
+  const buzzer = new Led(12);
 
-    const proximity = new Proximity({
-      controller: "HCSR04",
-      pin: 3,
-    });
-
-    proximity.on("data", function () {
-      if (this.cm <= 20 && this.cm > 0) {
-        console.log(" cm : ", this.cm);
-        led.on();
-        buzzer.on();
-        connect();
-        async function connect() {
-          const client = new MongoClient(uri, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-          });
-          await client.connect();
-          const db = client.db("opss");
-          // console.log("conectado a la BD", db.databaseName);
-          const clientes = db.collection("clientes");
-          await clientes.updateOne(
-            { correo: params.correo },
-            { $set: { [`alarmas.alarma ${id}`]: "encendida" } }
-          );
-          // console.log(actualizar.modifiedCount);
-          client.close();
-        }
-      }
-      led.off();
-      buzzer.off();
-    });
+  const proximity = new Proximity({
+    controller: "HCSR04",
+    pin: 3,
   });
 
+  proximity.on("data", function () {
+    if (this.cm <= 20 && this.cm > 0) {
+      console.log(" cm : ", this.cm);
+      led.on();
+      buzzer.on();
+      connect();
+      async function connect() {
+        const client = new MongoClient(uri, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        });
+        await client.connect();
+        const db = client.db("opss");
+        // console.log("conectado a la BD", db.databaseName);
+        const clientes = db.collection("clientes");
+        await clientes.updateOne(
+          { correo: params.correo },
+          { $set: { [`alarmas.alarma ${id}`]: "encendida" } }
+        );
+        // console.log(actualizar.modifiedCount);
+        client.close();
+      }
+    }
+    led.off();
+    buzzer.off();
+  });
+});
+
+app.get("/", (req, res) => {
+  let mensaje = "Hola mundo";
   res.send({
-    mensaje: "Hola mundo",
+    mensaje,
   });
 });
 
