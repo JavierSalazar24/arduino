@@ -28,10 +28,6 @@ app.listen(puerto, () => {
 });
 
 app.get("/", (req, res) => {
-  res.send({
-    mensaje: "Hola mundo",
-  });
-
   // // Traer el board y el led
   const { Board, Led, Proximity } = require("johnny-five");
   const board = new Board();
@@ -49,6 +45,10 @@ app.get("/", (req, res) => {
     proximity.on("data", function () {
       if (this.cm <= 20 && this.cm > 0) {
         console.log(" cm : ", this.cm);
+        let cm = this.cm;
+        res.send({
+          mensaje: cm,
+        });
         led.on();
         buzzer.on();
         // led.blink(200);
