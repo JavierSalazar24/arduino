@@ -39,20 +39,20 @@ app.get("/", (req, res) => {
 });
 
 // Iniciar el board
-board.on("ready", () => {
+ board.on("ready", async () => {
   var led = new Led(13);
   var buzzer = new Led(12);
 
   // var params = req.body;
   // let id = parseInt(params.id_alarma) + 1;
 
-  var proximity = new Proximity({
+  proximity = new Proximity ({
     controller: "HCSR04",
     pin: 3,
   });
 
-  proximity.on("data", function () {
-    if (this.cm <= 20 && this.cm > 0) {
+  await proximity.on("data", async function () {
+      if (this.cm <= 20 && this.cm > 0) {
       console.log(" cm : ", this.cm);
       led.on();
       buzzer.on();
