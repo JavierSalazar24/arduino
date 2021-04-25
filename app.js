@@ -13,10 +13,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 //requerir MongoDB
-const { MongoClient } = require("mongodb");
-// URL de la BD
-const uri =
-  "mongodb+srv://javier:javier12345@cluster0.w3wdi.mongodb.net/opss?retryWrites=true&w=majority";
+// const { MongoClient } = require("mongodb");
+// // URL de la BD
+// const uri =
+//   "mongodb+srv://javier:javier12345@cluster0.w3wdi.mongodb.net/opss?retryWrites=true&w=majority";
 
 //Escuchar por el puerto que nos de el sitio
 const puerto = process.env.PORT || 3900;
@@ -82,7 +82,7 @@ board.on("ready", () => {
   });
 
   // Ruta de encendido
-  app.post("/encendido", (req, res) => {
+  app.get("/encendido", (req, res) => {
     status = true;
     console.log(status);
 
@@ -95,7 +95,7 @@ board.on("ready", () => {
   });
 
   // Ruta de apagado
-  app.post("/apagado", (req, res) => {
+  app.get("/apagado", (req, res) => {
     status = false;
     console.log(status);
 
