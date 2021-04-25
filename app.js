@@ -33,10 +33,9 @@ var board = new Board();
 
 app.get("/", (req, res) => {
   let mensaje = "Hola mundo";
-  res.send({
+  res.send(console.log("Probando sin board"), {
     mensaje,
   });
-  console.log("Probando sin board");
   // Iniciar el board
   board.on("ready", async () => {
     console.log("Probando con board");
