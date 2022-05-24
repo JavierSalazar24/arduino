@@ -4,12 +4,12 @@
 var bodyParser = require("body-parser"); //convertir todo a JSON
 const express = require("express"); //requerir express
 const app = express(); //instanciar express
-const Serialport = require("serialport"); //Importación de la libreria del serialport
+// const Serialport = require("serialport"); //Importación de la libreria del serialport
 
 //configuración del puerto del arduino y los baudios establecidos en el Arduino IDE
-const port = new Serialport("COM3", {
-  baudRate: 57600,
-});
+// const port = new Serialport("COM3", {
+//   baudRate: 57600,
+// });
 
 // cargar el body-parser para utilizar posteriormente
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -33,20 +33,50 @@ app.listen(puerto, () => {
 });
 
 // // Traer el board y el led
-var five = require("johnny-five");
-var firmata = require("firmata");
+var { Board, Led } = require("johnny-five");
+// var firmata = require("firmata");
 
 //The "sp" variable here could be any instance of a virtual serial port
-var io = new firmata.Board(port);
-var board = new five.Board({ io: io });
+// var io = new firmata.Board(port);
+// var board = new five.Board({ io: io });
+var board = new Board();
 board.on("ready", function () {
-  var led = new five.Led(13);
-  app.get("/", (req, res) => {
-    let mensaje = "Hola mundo";
-    res.send({
-      mensaje,
+  // var led = new Led(13);
+  // app.get("/", (req, res) => {
+  //   let mensaje = "Hola mundo";
+  //   res.send({
+  //     mensaje,
+  //   });
+  //   led.on();
+  // });
+  // // Ruta de encendido
+  var led = new Led(13);
+  var buzzer = new Led(12);
+  app.get("/encendido", (req, res) => {
+    status = true;
+    console.log(status);
+
+    led.blink(500);
+    buzzer.blink(500);
+
+    return res.status(200).send({
+      status,
     });
-    led.on();
+  });
+
+  // Ruta de apagado
+  app.get("/apagado", (req, res) => {
+    status = false;
+    console.log(status);
+
+    led.stop();
+    led.off();
+    buzzer.off();
+    buzzer.stop();
+
+    return res.status(200).send({
+      status,
+    });
   });
 });
 
@@ -93,32 +123,38 @@ board.on("ready", function () {
 //     buzzer.off();
 //   });
 
-//   // // Ruta de encendido
-//   // app.get("/encendido", (req, res) => {
-//   //   status = true;
-//   //   console.log(status);
+// // Ruta de encendido
+// app.get("/encendido", (req, res) => {
+//   var led = new Led(13);
+//   var buzzer = new Led(12);
 
-//   //   led.blink(500);
-//   //   buzzer.blink(500);
+//   status = true;
+//   console.log(status);
 
-//   //   return res.status(200).send({
-//   //     status,
-//   //   });
-//   // });
+//   led.blink(500);
+//   buzzer.blink(500);
 
-//   // // Ruta de apagado
-//   // app.get("/apagado", (req, res) => {
-//   //   status = false;
-//   //   console.log(status);
+//   return res.status(200).send({
+//     status,
+//   });
+// });
 
-//   //   led.stop();
-//   //   led.off();
-//   //   buzzer.off();
-//   //   buzzer.stop();
+// // Ruta de apagado
+// app.get("/apagado", (req, res) => {
+//   var led = new Led(13);
+//   var buzzer = new Led(12);
+//   status = false;
+//   console.log(status);
 
-//   //   return res.status(200).send({
-//   //     status,
-//   //   });
+//   led.stop();
+//   led.off();
+//   buzzer.off();
+//   buzzer.stop();
+
+//   return res.status(200).send({
+//     status,
+//   });
+// });
 
 //   //   // var params = req.body;
 //   //   // let id = parseInt(params.id_alarma) + 1;
