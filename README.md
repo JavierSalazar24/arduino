@@ -1,2 +1,2 @@
-# arduino
-program with arduino UNO
+# nodejs_backend
+backend with node.js and mongodb
